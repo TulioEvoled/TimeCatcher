@@ -53,6 +53,8 @@ android {
 
 dependencies {
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.google.maps)
+    implementation(libs.google.location)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
