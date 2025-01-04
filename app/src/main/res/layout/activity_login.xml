@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/lugares"
+    >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,12 +12,13 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="16dp">
-
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"/>
+            android:hint="Email"
+            android:textSize="19sp"
+            />
 
         <EditText
             android:id="@+id/etPassword"

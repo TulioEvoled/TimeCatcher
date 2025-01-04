@@ -13,13 +13,31 @@
             android:id="@+id/textViewWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome!"
-            android:textSize="24sp" />
+            android:text="FORMULARIO!"
+            android:textSize="32sp"
+            android:textColor="@color/purple_700"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ingresa tu nombre"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/buttonGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Guardar"
+            android:textColor="@color/purple_700"
+            />
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            />
+
+
 
     </LinearLayout>
 
