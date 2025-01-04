@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "969863301773",
+    "project_id": "timecatcher-e56be",
+    "storage_bucket": "timecatcher-e56be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969863301773:android:7a934c7c41fd694858f0c4",
+        "android_client_info": {
+          "package_name": "com.example.timecatcher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYakyp6jU5F3DlSceHODsfYKD4Igwf7d4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
