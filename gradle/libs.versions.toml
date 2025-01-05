@@ -33,9 +33,16 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 google-maps = { module = "com.google.android.gms:play-services-maps", version = "18.1.0" }
 google-location = { module = "com.google.android.gms:play-services-location", version = "21.0.1" }
 
+room-runtime = { module = "androidx.room:room-runtime", version = "2.5.1" }
+room-compiler = { module = "androidx.room:room-compiler", version = "2.5.1" }
+room-ktx = { module = "androidx.room:room-ktx", version = "2.5.1" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version = "4.3.15" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version = "1.9.10" }
+
+
 
