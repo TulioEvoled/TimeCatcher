@@ -13,24 +13,25 @@
             android:id="@+id/textViewWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FORMULARIO!"
+            android:text="Bienvenido"
             android:textSize="32sp"
             android:textColor="@color/purple_700"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ingresa tu nombre"
-            android:inputType="textPersonName" />
 
+        <!-- BOTÓN para Insertar actividad -->
         <Button
-            android:id="@+id/buttonGuardar"
+            android:id="@+id/btnInsertActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Guardar"
-            android:textColor="@color/purple_700"
-            />
+            android:text="Insert Activity"
+            android:layout_marginBottom="16dp" />
 
+        <!-- BOTÓN para Obtener actividades -->
+        <Button
+            android:id="@+id/btnGetActivities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Activities"
+            android:layout_marginBottom="16dp" />
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
