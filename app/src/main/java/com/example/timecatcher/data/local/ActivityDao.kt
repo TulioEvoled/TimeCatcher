@@ -10,9 +10,7 @@ class ActivityDAO(context: Context) {
 
     private val dbHelper = DatabaseHelper(context)
 
-    /**
-     * Insertar una actividad en la base de datos
-     */
+
     fun insertActivity(item: ActivityItem): Long {
         val db: SQLiteDatabase = dbHelper.writableDatabase
         val values = ContentValues().apply {
