@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services") // Firebase plugin
-    id("org.jetbrains.kotlin.kapt") // Plugin de KAPT
 }
 
 android {
@@ -53,7 +52,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.firebase.auth.ktx)
+    implementation ("com.google.firebase:firebase-auth:22.1.0")
     implementation(libs.google.maps)
     implementation(libs.google.location)
 
@@ -74,8 +73,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
+
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+
 
 }

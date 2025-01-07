@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Para ingresar título y descripción de la actividad -->
         <EditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
@@ -24,19 +25,27 @@
             android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/btnSaveActivity"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar Actividad"
             android:layout_marginTop="8dp" />
 
-        <!-- Para ver el resultado de la lista de actividades -->
+        <Button
+            android:id="@+id/btnLoadAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cargar Todas"
+            android:layout_marginTop="8dp" />
+
+        <!-- Simplemente un TextView para mostrar la lista de actividades -->
         <TextView
             android:id="@+id/tvActivities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:text="Aquí aparecerán las actividades" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

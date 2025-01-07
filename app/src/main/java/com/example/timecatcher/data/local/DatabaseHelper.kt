@@ -8,6 +8,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     override fun onCreate(db: SQLiteDatabase?) {
         // Aquí creamos nuestras tablas
+
         val createActivitiesTable = """
             CREATE TABLE $TABLE_ACTIVITIES (
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,7 +16,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_DESCRIPTION TEXT,
                 $COLUMN_LATITUDE REAL,
                 $COLUMN_LONGITUDE REAL,
-                $COLUMN_ESTIMATED_TIME INTEGER
+                $COLUMN_ESTIMATED_TIME INTEGER,
+                $COLUMN_COMPLETED INTEGER DEFAULT 0
             );
         """.trimIndent()
 
@@ -42,5 +44,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_LATITUDE = "latitude"
         const val COLUMN_LONGITUDE = "longitude"
         const val COLUMN_ESTIMATED_TIME = "estimatedTime"
+        const val COLUMN_COMPLETED = "completed"
     }
 }

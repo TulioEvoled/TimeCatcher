@@ -19,6 +19,8 @@ class ActivityDAO(context: Context) {
             put(DatabaseHelper.COLUMN_LATITUDE, item.latitude)
             put(DatabaseHelper.COLUMN_LONGITUDE, item.longitude)
             put(DatabaseHelper.COLUMN_ESTIMATED_TIME, item.estimatedTime)
+            // Convirtiendo boolean a int (0 = false, 1 = true)
+            put(DatabaseHelper.COLUMN_COMPLETED, if (item.completed) 1 else 0)
         }
         val resultId = db.insert(DatabaseHelper.TABLE_ACTIVITIES, null, values)
         db.close()
@@ -41,6 +43,9 @@ class ActivityDAO(context: Context) {
                 val latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LATITUDE))
                 val longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LONGITUDE))
                 val estimatedTime = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ESTIMATED_TIME))
+                // Convertir integer -> boolean
+                val completedInt = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMPLETED))
+                val completed = (completedInt == 1)
 
                 val activityItem = ActivityItem(
                     id = id,
@@ -48,7 +53,8 @@ class ActivityDAO(context: Context) {
                     description = description,
                     latitude = latitude,
                     longitude = longitude,
-                    estimatedTime = estimatedTime
+                    estimatedTime = estimatedTime,
+                    completed = completed
                 )
                 activities.add(activityItem)
             } while (cursor.moveToNext())
@@ -70,6 +76,7 @@ class ActivityDAO(context: Context) {
             put(DatabaseHelper.COLUMN_LATITUDE, item.latitude)
             put(DatabaseHelper.COLUMN_LONGITUDE, item.longitude)
             put(DatabaseHelper.COLUMN_ESTIMATED_TIME, item.estimatedTime)
+            put(DatabaseHelper.COLUMN_COMPLETED, if (item.completed) 1 else 0)
         }
         val rowsAffected = db.update(
             DatabaseHelper.TABLE_ACTIVITIES,

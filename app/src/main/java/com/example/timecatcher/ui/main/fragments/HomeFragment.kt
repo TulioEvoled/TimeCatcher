@@ -17,7 +17,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inicializamos nuestro DAO
+        // Crear instancia de nuestro DAO para las operaciones en la BD
         activityDAO = ActivityDAO(requireContext())
     }
 
@@ -32,39 +32,55 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Botón "Guardar Actividad"
-        binding.btnSaveActivity.setOnClickListener {
+        // 1. Botón para guardar una nueva actividad en la BD
+        binding.btnSave.setOnClickListener {
             val title = binding.etTitle.text.toString().trim()
             val description = binding.etDescription.text.toString().trim()
 
             if (title.isNotEmpty()) {
                 val newActivity = ActivityItem(
+                    // No ponemos id porque es autoincrement
                     title = title,
                     description = description,
                     latitude = null,
                     longitude = null,
-                    estimatedTime = null
+                    estimatedTime = null,
+                    completed = false
                 )
-                // Insertar en base de datos
                 val resultId = activityDAO.insertActivity(newActivity)
                 if (resultId > -1) {
-                    Toast.makeText(requireContext(), "Actividad insertada con ID: $resultId", Toast.LENGTH_SHORT).show()
-                    loadActivities()
+                    Toast.makeText(requireContext(), "Insertado ID: $resultId", Toast.LENGTH_SHORT).show()
+                    // Limpiar campos
+                    binding.etTitle.text.clear()
+                    binding.etDescription.text.clear()
+                } else {
+                    Toast.makeText(requireContext(), "Error al insertar", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Título no puede estar vacío", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Cargar la lista de actividades al iniciar
-        loadActivities()
+        // 2. Botón para cargar todas las actividades
+        binding.btnLoadAll.setOnClickListener {
+            loadAllActivities()
+        }
     }
 
-    private fun loadActivities() {
+    private fun loadAllActivities() {
         val list = activityDAO.getAllActivities()
-        // Aquí podrías usar un RecyclerView para mostrarlas. Ejemplo rápido:
-        binding.tvActivities.text = list.joinToString("\n") {
-            "ID:${it.id} - ${it.title}"
+        val textBuilder = StringBuilder()
+        list.forEach { activity ->
+            textBuilder.append("ID: ${activity.id}\n")
+            textBuilder.append("Título: ${activity.title}\n")
+            textBuilder.append("Descripción: ${activity.description}\n")
+            textBuilder.append("Completado: ${activity.completed}\n\n")
+        }
+
+        binding.tvActivities.text = if (textBuilder.isEmpty()) {
+            "No hay actividades guardadas."
+        } else {
+            textBuilder.toString()
         }
     }
 }
