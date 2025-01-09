@@ -16,64 +16,64 @@
         android:src="@drawable/logo"
         android:layout_gravity="center" />
 
-    <!-- Container for email and password -->
-    <LinearLayout
+
+
+    <!-- Username input -->
+    <EditText
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="vertical"
-        android:background="@drawable/rounded_container"
-        android:padding="16dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="24dp">
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:drawableStart="@drawable/ic_user"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginHorizontal="32dp" />
 
-        <!-- Username input -->
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:drawableStart="@drawable/ic_user"
-            android:padding="12dp"
-            android:background="@drawable/rounded_edittext"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Password input -->
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:drawableStart="@drawable/ic_eye"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:background="@drawable/rounded_edittext" />
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/purple_700"
-            android:text="Login"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/ntnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_outline"
-            android:text="Register"
-            android:textColor="@color/purple_700" />
-    </LinearLayout>
+    <!-- Password input -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:drawableStart="@drawable/ic_eye"
+        android:inputType="textPassword"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginHorizontal="32dp" />
 
     <!-- Forgot Password -->
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot your password?"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center" />
 
     <!-- Login button -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/purple_700"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="32dp" />
 
     <!-- Buy Account button -->
+    <Button
+        android:id="@+id/ntnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@color/purple_700"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp" />
 
 </LinearLayout>
