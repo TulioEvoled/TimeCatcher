@@ -16,6 +16,7 @@ import com.example.timecatcher.ui.main.fragments.SettingsFragment
 import com.example.timecatcher.utils.PrefsManager
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
     val prefs = PrefsManager(this)
     private lateinit var binding: ActivityMainDrawerBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
