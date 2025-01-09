@@ -17,27 +17,33 @@ import com.example.timecatcher.utils.PrefsManager
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val prefs = PrefsManager(this)
     private lateinit var binding: ActivityMainDrawerBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    // 1) Declaramos 'prefs' como lateinit para inicializarla correctamente en onCreate().
+    private lateinit var prefs: PrefsManager
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // 2) Ahora inicializamos 'prefs' con un contexto válido (this).
+        prefs = PrefsManager(this)
+
+        // 3) Aplicamos modo oscuro/claro según la preferencia guardada.
         if (prefs.isDarkModeEnabled()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-        super.onCreate(savedInstanceState)
 
-        // Usando ViewBinding para activity_main_drawer.xml
+        // 4) Inflamos el layout del Drawer.
         binding = ActivityMainDrawerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configurar la Toolbar
+        // 5) Configuramos la Toolbar
         setSupportActionBar(binding.toolbar)
 
-        // Crear el toggle para sincronizar el drawer con el icono de hamburguesa
+        // 6) Sincronizamos el DrawerLayout con el icono de hamburguesa en la Toolbar
         drawerToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -46,12 +52,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_close
         )
         binding.drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()  // Muestra el ícono de hamburguesa
+        drawerToggle.syncState()
 
-        // Escucha de eventos de la NavigationView
+        // 7) Escucha de eventos del NavigationView
         binding.navView.setNavigationItemSelectedListener(this)
 
-        // Abrir un fragment inicial (por ejemplo, HomeFragment)
+        // 8) Abrimos un fragment inicial (por ejemplo, HomeFragment).
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, HomeFragment())
@@ -81,20 +87,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Manejar cierre de sesión (Firebase signOut, etc.)
             }
         }
-        binding.drawerLayout.closeDrawer(GravityCompat.START)  // Cierra el drawer después de la selección
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
     override fun onBackPressed() {
-        // Si el drawer está abierto, ciérralo, en vez de salir de la app directamente
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
     }
-
-
 }
 
 //val fragment = HomeFragment()

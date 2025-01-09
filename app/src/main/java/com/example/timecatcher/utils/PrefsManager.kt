@@ -1,6 +1,5 @@
 package com.example.timecatcher.utils
 
-
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -25,5 +24,4 @@ class PrefsManager(context: Context) {
         return prefs.getBoolean("notificationsEnabled", true)
     }
 
-    // Agrega más getters/setters según tus necesidades...
 }

@@ -17,22 +17,6 @@
             android:textSize="32sp"
             android:textColor="@color/purple_700"/>
 
-        <!-- BOTÓN para Insertar actividad -->
-        <Button
-            android:id="@+id/btnInsertActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Insert Activity"
-            android:layout_marginBottom="16dp" />
-
-        <!-- BOTÓN para Obtener actividades -->
-        <Button
-            android:id="@+id/btnGetActivities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get Activities"
-            android:layout_marginBottom="16dp" />
-
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"

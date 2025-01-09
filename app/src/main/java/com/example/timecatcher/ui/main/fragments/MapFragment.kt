@@ -13,29 +13,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import android.view.ViewGroup
-import android.view.LayoutInflater
-import com.example.timecatcher.databinding.FragmentMapBinding
-import com.google.android.gms.maps.model.MarkerOptions
 
+class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
 
-class MapFragment : Fragment(), OnMapReadyCallback {
-
-    private lateinit var binding: FragmentMapBinding
     private lateinit var map: GoogleMap
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMapBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Encontrar el SupportMapFragment dentro de fragment_map.xml
         val mapFragment = childFragmentManager.findFragmentById(R.id.googleMapFragment)
                 as com.google.android.gms.maps.SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -52,7 +36,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Solicitar permiso
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -65,31 +48,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun centerMapOnUserLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            val fusedLocationClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                location?.let {
-                    val userLatLng = LatLng(it.latitude, it.longitude)
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
-
-                    // Ejemplo opcional: agregar un marker
-                    map.addMarker(
-                        MarkerOptions().position(userLatLng).title("Estás aquí")
-                    )
-                }
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                val userLatLng = LatLng(it.latitude, it.longitude)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
             }
-        } else {
-            // Si los permisos no están concedidos, solicítalos
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                100
-            )
         }
     }
 }
