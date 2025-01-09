@@ -49,6 +49,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
 
         // 4. Manejo de clic en InfoWindow (opcional)
         map.setOnInfoWindowClickListener { marker ->
+            val activityId = marker.tag as? Int ?: return@setOnInfoWindowClickListener
+            showUpdateDeleteDialog(activityId)
             // Aquí podrías, por ejemplo, mostrar un Toast o abrir un DetailActivity
             Toast.makeText(requireContext(), "Marker: ${marker.title}", Toast.LENGTH_SHORT).show()
         }
@@ -122,7 +124,11 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
                     .position(position)
                     .title(activity.title)
                     .snippet(activity.description)
-                map.addMarker(markerOptions)
+                // Guardamos el Marker que se crea al añadirlo al mapa
+                val marker = map.addMarker(markerOptions)
+
+                // Aquí asignamos la ID de la actividad al tag del marker
+                marker?.tag = activity.id
             }
         }
     }
@@ -167,6 +173,60 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
             .create()
             .show()
     }
+
+    private fun showUpdateDeleteDialog(activityId: Int) {
+        // 1. Obtener la actividad actual de la BD
+        val activityItem = activityDAO.getActivityById(activityId) ?: return
+
+        // 2. Inflar el layout del diálogo
+        val dialogView = layoutInflater.inflate(R.layout.dialog_update_delete, null)
+        val etTitleUpdate = dialogView.findViewById<EditText>(R.id.etTitleUpdate)
+        val etDescriptionUpdate = dialogView.findViewById<EditText>(R.id.etDescriptionUpdate)
+
+        // 3. Rellenar los EditText con los datos actuales
+        etTitleUpdate.setText(activityItem.title)
+        etDescriptionUpdate.setText(activityItem.description)
+
+        // 4. Construir el AlertDialog
+        AlertDialog.Builder(requireContext())
+            .setTitle("Editar Actividad")
+            .setView(dialogView)
+            .setPositiveButton("Actualizar") { dialog, _ ->
+                // Actualizar la actividad
+                val newTitle = etTitleUpdate.text.toString().trim()
+                val newDesc = etDescriptionUpdate.text.toString().trim()
+                if (newTitle.isNotEmpty()) {
+                    val updatedItem = activityItem.copy(
+                        title = newTitle,
+                        description = newDesc
+                    )
+                    val rowsAffected = activityDAO.updateActivity(updatedItem)
+                    if (rowsAffected > 0) {
+                        Toast.makeText(requireContext(), "Actualizado", Toast.LENGTH_SHORT).show()
+                        loadMarkers()  // refrescar mapa
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Título requerido", Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+            .setNeutralButton("Eliminar") { dialog, _ ->
+                // Eliminar la actividad
+                val rowsDeleted = activityDAO.deleteActivity(activityId)
+                if (rowsDeleted > 0) {
+                    Toast.makeText(requireContext(), "Eliminado", Toast.LENGTH_SHORT).show()
+                    loadMarkers() // refrescar mapa
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+
 
     /**
      * Maneja el resultado de solicitar permisos al usuario.
