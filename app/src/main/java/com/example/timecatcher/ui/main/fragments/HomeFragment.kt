@@ -22,9 +22,11 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflar el layout con ViewBinding
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,7 +34,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Botón para guardar una nueva actividad en la BD
+        // Botón para guardar una nueva actividad en la BD
         binding.btnSave.setOnClickListener {
             val title = binding.etTitle.text.toString().trim()
             val description = binding.etDescription.text.toString().trim()
@@ -61,7 +63,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // 2. Botón para cargar todas las actividades
+        // Botón para cargar todas las actividades
         binding.btnLoadAll.setOnClickListener {
             loadAllActivities()
         }

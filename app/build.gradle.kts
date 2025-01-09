@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services") // Firebase plugin
+
 }
 
 android {
@@ -52,7 +53,7 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.firebase:firebase-auth:22.1.0")
+    implementation("com.google.firebase:firebase-auth:22.1.0")
     implementation(libs.google.maps)
     implementation(libs.google.location)
 
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -76,6 +78,4 @@ dependencies {
 
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-
-
 }
