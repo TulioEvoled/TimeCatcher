@@ -57,12 +57,31 @@ class ActivityDAO(context: Context) {
                     completed = completed
                 )
                 activities.add(activityItem)
+
+                    val activity = cursorToActivity(cursor)
+                    activities.add(activity)
+
             } while (cursor.moveToNext())
         }
 
         cursor.close()
         db.close()
         return activities
+    }
+
+    fun getActivityById(itemId: Int): ActivityItem? {
+        val db = dbHelper.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT * FROM ${DatabaseHelper.TABLE_ACTIVITIES} WHERE ${DatabaseHelper.COLUMN_ID} = ?",
+            arrayOf(itemId.toString())
+        )
+        var activityItem: ActivityItem? = null
+        if (cursor.moveToFirst()) {
+            activityItem = cursorToActivity(cursor)
+        }
+        cursor.close()
+        db.close()
+        return activityItem
     }
 
     /**
@@ -100,6 +119,28 @@ class ActivityDAO(context: Context) {
         )
         db.close()
         return rowsDeleted
+    }
+
+    // Función auxiliar para convertir Cursor a ActivityItem
+    private fun cursorToActivity(cursor: Cursor): ActivityItem {
+        val id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID))
+        val title = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITLE))
+        val description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION))
+        val latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LATITUDE))
+        val longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LONGITUDE))
+        val estimatedTime = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ESTIMATED_TIME))
+        val completedInt = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMPLETED))
+        val completed = (completedInt == 1)
+
+        return ActivityItem(
+            id = id,
+            title = title,
+            description = description,
+            latitude = latitude,
+            longitude = longitude,
+            estimatedTime = estimatedTime,
+            completed = completed
+        )
     }
 }
 
