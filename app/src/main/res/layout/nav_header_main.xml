@@ -10,16 +10,16 @@
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_gravity="center_vertical"/>
+        android:layout_width="112dp"
+        android:layout_height="93dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/sinfondo" />
 
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User Name"
+        android:text="TimeCather"
         android:textColor="@android:color/white"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="10dp"/>
 </LinearLayout>

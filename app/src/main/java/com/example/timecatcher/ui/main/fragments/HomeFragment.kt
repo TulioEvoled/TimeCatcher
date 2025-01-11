@@ -1,5 +1,7 @@
 package com.example.timecatcher.ui.main.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.timecatcher.data.local.ActivityDAO
 import com.example.timecatcher.data.model.ActivityItem
 import com.example.timecatcher.databinding.FragmentHomeBinding
+import com.example.timecatcher.utils.FileUtils
 
 class HomeFragment : Fragment() {
 
@@ -28,7 +31,45 @@ class HomeFragment : Fragment() {
     ): View {
         // Inflar el layout con ViewBinding
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        // Si vas a poner un Button en el layout, configúralo aquí
+        binding.btnExportCsv.setOnClickListener {
+            exportActivitiesCSV()
+        }
+
         return binding.root
+    }
+
+    private fun exportActivitiesCSV() {
+        val activities = activityDAO.getAllActivities()
+
+        if (activities.isEmpty()) {
+            Toast.makeText(requireContext(), "No hay actividades para exportar", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val fileUri: Uri? = FileUtils.exportActivitiesToCSV(
+            context = requireContext(),
+            fileName = "Actividades",
+            activities = activities
+        )
+
+        if (fileUri != null) {
+            Toast.makeText(requireContext(), "CSV exportado con éxito", Toast.LENGTH_SHORT).show()
+            shareCSVFile(fileUri)
+        } else {
+            Toast.makeText(requireContext(), "Error al exportar CSV", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareCSVFile(csvUri: Uri) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/csv"
+            putExtra(Intent.EXTRA_STREAM, csvUri)
+            // Importante: permitir a otras apps leer este content URI
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

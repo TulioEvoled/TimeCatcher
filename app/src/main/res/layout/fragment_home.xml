@@ -38,6 +38,12 @@
             android:text="Cargar Todas"
             android:layout_marginTop="8dp" />
 
+        <Button
+            android:id="@+id/btnExportCsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exportar CSV" />
+
         <!-- Simplemente un TextView para mostrar la lista de actividades -->
         <TextView
             android:id="@+id/tvActivities"

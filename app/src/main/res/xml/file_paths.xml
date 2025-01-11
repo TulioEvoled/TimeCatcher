@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permite exponer archivos que estén en getExternalFilesDir(null) -->
+    <external-files-path
+        name="external_files"
+        path="." />
+</paths>
