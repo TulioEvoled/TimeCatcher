@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/home"
+    >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,28 +17,44 @@
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Título" />
+            android:hint="Título"
+            android:layout_marginTop="24dp"
+            android:padding="12dp"
+            android:background="@drawable/rounded_edittext"
+            />
 
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripción"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="15dp"
+            android:padding="12dp"
+            android:background="@drawable/rounded_edittext"/>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar Actividad"
-            android:layout_marginTop="8dp" />
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/purple_700"
+            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="32dp"
+            />
 
         <Button
             android:id="@+id/btnLoadAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cargar Todas"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/purple_700"
+            android:layout_marginHorizontal="32dp"
+            />
 
         <!-- Simplemente un TextView para mostrar la lista de actividades -->
         <TextView
@@ -46,6 +64,7 @@
             android:textSize="16sp"
             android:layout_marginTop="16dp"
             android:text="Aquí aparecerán las actividades" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
