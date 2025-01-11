@@ -78,4 +78,6 @@ dependencies {
 
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
+
+    implementation("com.android.volley:volley:1.2.1")
 }
