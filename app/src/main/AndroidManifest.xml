@@ -21,6 +21,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDURw7OTNTf2sCRshsu2z1gdZSX4ptlUXc" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!-- LoginActivity debe ser la actividad principal -->
         <activity
             android:name=".ui.login.LoginActivity"

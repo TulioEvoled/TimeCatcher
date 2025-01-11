@@ -3,6 +3,7 @@ package com.example.timecatcher.utils
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.example.timecatcher.data.model.ActivityItem
 import java.io.File
 import java.io.FileOutputStream
@@ -29,16 +30,13 @@ object FileUtils {
 
             val csvFile = File(context.getExternalFilesDir(null), "$fileName.csv")
 
-            // 2. Escribir contenido en el archivo
+            // Escribimos el CSV
             FileOutputStream(csvFile).use { fos ->
-                // Escribimos un encabezado (puedes cambiarlo según tus columnas)
                 fos.write("ID,Titulo,Descripcion,Completado\n".toByteArray())
-
-                // Escribimos cada registro
                 for (act in activities) {
                     val row = buildString {
                         append(act.id).append(",")
-                        append("\"${act.title}\",")          // Se sugiere poner comillas para texto
+                        append("\"${act.title}\",")
                         append("\"${act.description}\",")
                         append(act.completed)
                         append("\n")
@@ -47,8 +45,14 @@ object FileUtils {
                 }
             }
 
-            // 3. Devolvemos la Uri del archivo
-            Uri.fromFile(csvFile)
+            // Generamos una URI de tipo content:// en vez de file://
+            val contentUri: Uri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",  // Fíjate en el Manifest
+                csvFile
+            )
+
+            contentUri
 
         } catch (e: Exception) {
             Log.e("FileUtils", "Error al exportar CSV: ${e.localizedMessage}", e)

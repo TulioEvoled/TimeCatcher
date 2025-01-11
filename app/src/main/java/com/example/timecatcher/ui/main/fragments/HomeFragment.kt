@@ -41,39 +41,33 @@ class HomeFragment : Fragment() {
     }
 
     private fun exportActivitiesCSV() {
-        // 1. Obtener la lista de actividades desde la BD
-        val activities: List<ActivityItem> = activityDAO.getAllActivities()
+        val activities = activityDAO.getAllActivities()
 
         if (activities.isEmpty()) {
             Toast.makeText(requireContext(), "No hay actividades para exportar", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // 2. Llamar a la función de FileUtils
         val fileUri: Uri? = FileUtils.exportActivitiesToCSV(
             context = requireContext(),
-            fileName = "Actividades",   // nombre del archivo sin extensión
+            fileName = "Actividades",
             activities = activities
         )
 
         if (fileUri != null) {
             Toast.makeText(requireContext(), "CSV exportado con éxito", Toast.LENGTH_SHORT).show()
-
-            // 3. Compartir o “Abrir con…” (Opcional)
             shareCSVFile(fileUri)
         } else {
             Toast.makeText(requireContext(), "Error al exportar CSV", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /**
-     * Comparte el archivo CSV con un intent ACTION_SEND.
-     */
     private fun shareCSVFile(csvUri: Uri) {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/csv"
             putExtra(Intent.EXTRA_STREAM, csvUri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) // permitir que otras apps lean la Uri
+            // Importante: permitir a otras apps leer este content URI
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
     }
