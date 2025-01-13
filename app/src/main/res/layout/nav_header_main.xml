@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="112dp"
-        android:layout_height="93dp"
+        android:layout_width="89dp"
+        android:layout_height="68dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/sinfondo" />
 
@@ -19,7 +19,7 @@
         android:id="@+id/tvUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TimeCather"
+        android:text="     TimeCather"
         android:textColor="@android:color/white"
         android:layout_marginTop="10dp"/>
 </LinearLayout>
