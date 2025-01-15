@@ -5,11 +5,12 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
-class VolleySingleton constructor(context: Context) {
+class VolleySingleton private constructor(context: Context) {
 
     companion object {
         @Volatile
         private var INSTANCE: VolleySingleton? = null
+
         fun getInstance(context: Context) =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: VolleySingleton(context).also {
@@ -19,6 +20,7 @@ class VolleySingleton constructor(context: Context) {
     }
 
     val requestQueue: RequestQueue by lazy {
+        // getApplicationContext() evita fugas de memoria
         Volley.newRequestQueue(context.applicationContext)
     }
 
