@@ -126,4 +126,8 @@ class ActivityRepository(private val context: Context, private val activityDAO: 
             }
         )
     }
+
+    fun getAllLocalActivities(): List<ActivityItem> {
+        return activityDAO.getAllActivities()
+    }
 }

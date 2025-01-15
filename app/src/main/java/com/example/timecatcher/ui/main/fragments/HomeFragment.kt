@@ -3,25 +3,27 @@ package com.example.timecatcher.ui.main.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.timecatcher.data.local.ActivityDAO
 import com.example.timecatcher.data.model.ActivityItem
+import com.example.timecatcher.data.repository.ActivityRepository
 import com.example.timecatcher.databinding.FragmentHomeBinding
 import com.example.timecatcher.utils.FileUtils
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var activityDAO: ActivityDAO
+    private lateinit var repository: ActivityRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Crear instancia de nuestro DAO para las operaciones en la BD
-        activityDAO = ActivityDAO(requireContext())
+
+        // 1) Instanciamos el DAO
+        val dao = ActivityDAO(requireContext())
+        // 2) Creamos el repository (recibe el dao y el context)
+        repository = ActivityRepository(requireContext(), dao)
     }
 
     override fun onCreateView(
@@ -32,18 +34,115 @@ class HomeFragment : Fragment() {
         // Inflar el layout con ViewBinding
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Si vas a poner un Button en el layout, configúralo aquí
+        // Botón para exportar CSV
         binding.btnExportCsv.setOnClickListener {
             exportActivitiesCSV()
+        }
+
+        // Botón para guardar una nueva actividad (LOCAL + REMOTO a través del Repository)
+        binding.btnSave.setOnClickListener {
+            saveNewActivity()
+        }
+
+        // Botón para cargar todas las actividades (ejemplo de integración local + remoto)
+        binding.btnLoadAll.setOnClickListener {
+            loadAllActivities()
         }
 
         return binding.root
     }
 
-    private fun exportActivitiesCSV() {
-        val activities = activityDAO.getAllActivities()
+    /**
+     * Ejemplo de crear una nueva actividad usando el Repository.
+     * Se creará localmente y luego en el backend.
+     */
+    private fun saveNewActivity() {
+        val title = binding.etTitle.text.toString().trim()
+        val description = binding.etDescription.text.toString().trim()
 
-        if (activities.isEmpty()) {
+        if (title.isNotEmpty()) {
+            val newActivity = ActivityItem(
+                // id autoincrement local, lo asignará SQLite.
+                title = title,
+                description = description,
+                latitude = null,
+                longitude = null,
+                estimatedTime = null,
+                completed = false
+            )
+
+            repository.createActivity(
+                item = newActivity,
+                onLocalSuccess = { newId ->
+                    // Esto se llama cuando la inserción local fue exitosa
+                    Toast.makeText(requireContext(), "Insertado local con ID: $newId", Toast.LENGTH_SHORT).show()
+                    // Limpiar campos
+                    binding.etTitle.text.clear()
+                    binding.etDescription.text.clear()
+                },
+                onRemoteSuccess = { remoteItem ->
+                    // Esto se llama cuando la creación en el servidor fue exitosa
+                    Toast.makeText(requireContext(), "Creado en servidor: ${remoteItem.title}", Toast.LENGTH_SHORT).show()
+                },
+                onError = { errorMsg ->
+                    // Manejo de error para remoto/local
+                    Toast.makeText(requireContext(), "Error: $errorMsg", Toast.LENGTH_SHORT).show()
+                }
+            )
+        } else {
+            Toast.makeText(requireContext(), "Título no puede estar vacío", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Cargar actividades (local + remoto) usando el Repository.
+     */
+    private fun loadAllActivities() {
+        // Llamamos a un método del repositorio que obtenga primero local, luego remoto
+        repository.getAllActivities(
+            onLocalSuccess = { localList ->
+                // Mostrar la lista local en la UI
+                showActivitiesInTextView(localList)
+            },
+            onRemoteSuccess = { remoteList ->
+                // Si deseas sobreescribir la lista con la remota o fusionar,
+                // aquí podrías decidir tu lógica. Ej.: mostrar en el mismo TextView
+                // o sincronizar la DB local con la remota
+                // showActivitiesInTextView(remoteList)
+                Toast.makeText(requireContext(), "Datos remotos cargados: ${remoteList.size} items", Toast.LENGTH_SHORT).show()
+            },
+            onError = { err ->
+                Toast.makeText(requireContext(), "Error: $err", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    /**
+     * Muestra una lista de ActivityItem en el TextView.
+     */
+    private fun showActivitiesInTextView(list: List<ActivityItem>) {
+        val textBuilder = StringBuilder()
+        list.forEach { activity ->
+            textBuilder.append("ID: ${activity.id}\n")
+            textBuilder.append("Título: ${activity.title}\n")
+            textBuilder.append("Descripción: ${activity.description}\n")
+            textBuilder.append("Completado: ${activity.completed}\n\n")
+        }
+        binding.tvActivities.text = if (textBuilder.isEmpty()) {
+            "No hay actividades guardadas."
+        } else {
+            textBuilder.toString()
+        }
+    }
+
+    /**
+     * Exportar CSV (igual que antes, usando el FileUtils).
+     */
+    private fun exportActivitiesCSV() {
+        // Si deseas exportar SOLO lo local (SQLite)
+        val localActivities = repository.getAllLocalActivities()  // Podrías crear un método "getAllLocalActivities()" en tu Repository
+
+        if (localActivities.isEmpty()) {
             Toast.makeText(requireContext(), "No hay actividades para exportar", Toast.LENGTH_SHORT).show()
             return
         }
@@ -51,7 +150,7 @@ class HomeFragment : Fragment() {
         val fileUri: Uri? = FileUtils.exportActivitiesToCSV(
             context = requireContext(),
             fileName = "Actividades",
-            activities = activities
+            activities = localActivities
         )
 
         if (fileUri != null) {
@@ -66,64 +165,8 @@ class HomeFragment : Fragment() {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/csv"
             putExtra(Intent.EXTRA_STREAM, csvUri)
-            // Importante: permitir a otras apps leer este content URI
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Botón para guardar una nueva actividad en la BD
-        binding.btnSave.setOnClickListener {
-            val title = binding.etTitle.text.toString().trim()
-            val description = binding.etDescription.text.toString().trim()
-
-            if (title.isNotEmpty()) {
-                val newActivity = ActivityItem(
-                    // No ponemos id porque es autoincrement
-                    title = title,
-                    description = description,
-                    latitude = null,
-                    longitude = null,
-                    estimatedTime = null,
-                    completed = false
-                )
-                val resultId = activityDAO.insertActivity(newActivity)
-                if (resultId > -1) {
-                    Toast.makeText(requireContext(), "Insertado ID: $resultId", Toast.LENGTH_SHORT).show()
-                    // Limpiar campos
-                    binding.etTitle.text.clear()
-                    binding.etDescription.text.clear()
-                } else {
-                    Toast.makeText(requireContext(), "Error al insertar", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(requireContext(), "Título no puede estar vacío", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Botón para cargar todas las actividades
-        binding.btnLoadAll.setOnClickListener {
-            loadAllActivities()
-        }
-    }
-
-    private fun loadAllActivities() {
-        val list = activityDAO.getAllActivities()
-        val textBuilder = StringBuilder()
-        list.forEach { activity ->
-            textBuilder.append("ID: ${activity.id}\n")
-            textBuilder.append("Título: ${activity.title}\n")
-            textBuilder.append("Descripción: ${activity.description}\n")
-            textBuilder.append("Completado: ${activity.completed}\n\n")
-        }
-
-        binding.tvActivities.text = if (textBuilder.isEmpty()) {
-            "No hay actividades guardadas."
-        } else {
-            textBuilder.toString()
-        }
     }
 }
