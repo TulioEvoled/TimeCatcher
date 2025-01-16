@@ -11,16 +11,14 @@ class VolleySingleton private constructor(context: Context) {
         @Volatile
         private var INSTANCE: VolleySingleton? = null
 
-        fun getInstance(context: Context) =
+        fun getInstance(context: Context): VolleySingleton =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: VolleySingleton(context).also {
-                    INSTANCE = it
-                }
+                INSTANCE ?: VolleySingleton(context).also { INSTANCE = it }
             }
     }
 
-    val requestQueue: RequestQueue by lazy {
-        // getApplicationContext() evita fugas de memoria
+    private val requestQueue: RequestQueue by lazy {
+        // applicationContext evita fugas de memoria
         Volley.newRequestQueue(context.applicationContext)
     }
 
