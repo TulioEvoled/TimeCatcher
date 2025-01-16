@@ -12,9 +12,9 @@ import org.json.JSONObject
 
 object ActivityApi {
 
-    private const val BASE_URL = "http://192.168.1.195:3000/api/activities"
+    private const val BASE_URL = "http://10.0.2.2:3000/api/activities"
     // 10.0.2.2 apunta a localhost en el emulador de Android Studio.
-    // Cambia si usas dispositivo físico o despliegas en la nube.
+    // Cambia si usas dispositivo físico o nube
 
     /**
      * GET: Obtener todas las actividades
