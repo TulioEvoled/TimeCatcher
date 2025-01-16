@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/backhome">
 
     <!-- Frase motivadora -->
     <TextView
@@ -12,9 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="¡Descubre nuevos desafíos en tu ciudad!"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        />
+        android:textColor="#000000"
+        android:layout_gravity="center"
+        android:padding="8dp" />
 
     <!-- Sección para introducir tiempo disponible -->
     <LinearLayout
@@ -30,15 +33,20 @@
             android:layout_weight="1"
             android:hint="Tiempo disponible (min)"
             android:inputType="number"
-            />
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:textColor="#000"
+            android:textColorHint="#888" />
 
         <Button
             android:id="@+id/btnSearchActivities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Buscar"
-            android:layout_marginLeft="8dp"
-            />
+            android:background="@drawable/rounded_button"
+            android:textColor="#fff"
+            android:padding="12dp"
+            android:layout_marginLeft="8dp" />
     </LinearLayout>
 
     <!-- RecyclerView horizontal para mostrar 3 sugerencias -->
@@ -48,16 +56,18 @@
         android:layout_height="wrap_content"
         android:text="Actividades Sugeridas"
         android:textStyle="bold"
+        android:textColor="#000000"
         android:layout_marginTop="12dp"
-        />
+        android:padding="4dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSuggestions"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="4dp"
-        android:orientation="horizontal"
-        />
+        android:background="#ffffff"
+        android:elevation="4dp"
+        android:padding="4dp" />
 
     <!-- Lista vertical de actividades en curso con temporizador -->
     <TextView
@@ -66,21 +76,27 @@
         android:layout_height="wrap_content"
         android:text="En progreso"
         android:textStyle="bold"
+        android:textColor="#000000"
         android:layout_marginTop="12dp"
-        />
+        android:padding="4dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvInProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        />
+        android:background="#ffffff"
+        android:elevation="4dp"
+        android:padding="4dp" />
 
     <Button
         android:id="@+id/btnExportCsv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exportar CSV" />
-
+        android:text="Exportar CSV"
+        android:background="@drawable/rounded_button_register"
+        android:textColor="#fff"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center" />
 </LinearLayout>
-

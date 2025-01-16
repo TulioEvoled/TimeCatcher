@@ -4,27 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/backregister">
 
     <EditText
         android:id="@+id/etFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre de Viajero" />
+        android:hint="Nombre de Viajero"
+        android:background="@drawable/rounded_edittext"
+        android:padding="12dp"
+        android:layout_marginTop="40dp"
+        android:textColor="#000"
+        android:textColorHint="#888" />
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Alias Urbano"
-        android:layout_marginTop="8dp" />
+        android:background="@drawable/rounded_edittext"
+        android:padding="12dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
+        android:textColorHint="#888" />
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Cuéntanos algo de ti..."
-        android:layout_marginTop="8dp" />
+        android:background="@drawable/rounded_edittext"
+        android:padding="12dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
+        android:textColorHint="#888" />
 
     <EditText
         android:id="@+id/etEmailRegister"
@@ -32,7 +46,11 @@
         android:layout_height="wrap_content"
         android:hint="Correo Electrónico"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="8dp" />
+        android:background="@drawable/rounded_edittext"
+        android:padding="12dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
+        android:textColorHint="#888" />
 
     <EditText
         android:id="@+id/etPasswordRegister"
@@ -40,13 +58,20 @@
         android:layout_height="wrap_content"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:layout_marginTop="8dp" />
+        android:background="@drawable/rounded_edittext"
+        android:padding="12dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
+        android:textColorHint="#888" />
 
     <Button
         android:id="@+id/btnRegisterUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Registrarme"
-        android:layout_marginTop="16dp" />
+        android:background="@drawable/rounded_button_register"
+        android:textColor="#fff"
+        android:padding="12dp"
+        android:layout_marginTop="20dp" />
 
 </LinearLayout>

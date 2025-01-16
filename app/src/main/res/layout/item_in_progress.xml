@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    >
+    android:padding="12dp"
+    android:background="@drawable/rounded_background"
+    android:elevation="4dp">
 
     <TextView
         android:id="@+id/tvInProgressTitle"
@@ -14,18 +16,28 @@
         android:layout_weight="2"
         android:text="Título"
         android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/tvRemainingTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10:00"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginEnd="12dp"
+        android:textColor="#FF5722"
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/btnCompleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Completado"/>
+        android:text="Completado"
+        android:background="@drawable/rounded_button_register"
+        android:textColor="#FFFFFF"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp" />
 </LinearLayout>

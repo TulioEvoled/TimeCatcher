@@ -4,9 +4,10 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    android:layout_marginRight="8dp"
-    >
+    android:padding="16dp"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/rounded_background"
+    android:elevation="4dp">
 
     <TextView
         android:id="@+id/tvSuggestionTitle"
@@ -14,26 +15,36 @@
         android:layout_height="wrap_content"
         android:text="Título"
         android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:textSize="18sp"
+        android:textColor="#333333" />
 
     <TextView
         android:id="@+id/tvSuggestionDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Descripción"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textColor="#757575" />
 
     <TextView
         android:id="@+id/tvSuggestionTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10 min"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textColor="#FF5722" />
 
     <Button
         android:id="@+id/btnDoActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Realizar"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="12dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:textSize="14sp" />
 </LinearLayout>

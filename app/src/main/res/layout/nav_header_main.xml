@@ -13,7 +13,7 @@
         android:layout_width="89dp"
         android:layout_height="68dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/sinfondo" />
+        android:src="@drawable/newlogo" />
 
     <TextView
         android:id="@+id/tvNavEmail"

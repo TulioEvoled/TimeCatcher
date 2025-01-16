@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/profileback"
     android:padding="16dp">
 
     <LinearLayout
@@ -10,42 +11,53 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <EditText
             android:id="@+id/etProfileFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre de Viajero" />
+            android:layout_marginTop="30dp"
+            android:hint="Nombre de Viajero"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
 
         <EditText
             android:id="@+id/etProfileUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Alias Urbano"
-            android:layout_marginTop="8dp" />
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginTop="20dp"
+            android:padding="12dp" />
 
         <EditText
             android:id="@+id/etProfileDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripción"
-            android:layout_marginTop="8dp"/>
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginTop="20dp"
+            android:padding="12dp" />
 
         <EditText
             android:id="@+id/etProfileEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Correo"
+            android:background="@drawable/rounded_edittext"
             android:inputType="textEmailAddress"
             android:enabled="false"
-            android:layout_marginTop="8dp"
-            />
+            android:layout_marginTop="20dp"
+            android:padding="12dp" />
 
         <Button
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar cambios"
-            android:layout_marginTop="16dp" />
-
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_button_register"
+            android:textColor="#FFFFFF"
+            android:padding="12dp" />
     </LinearLayout>
 </ScrollView>
