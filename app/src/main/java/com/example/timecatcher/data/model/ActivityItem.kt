@@ -6,6 +6,6 @@ data class ActivityItem(
     val description: String,
     val latitude: Double?,
     val longitude: Double?,
-    val estimatedTime: Int?,
+    val estimatedTime: Int? = null, // en minutos
     val completed: Boolean = false
 )

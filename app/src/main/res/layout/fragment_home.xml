@@ -1,57 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
+    <!-- Frase motivadora -->
+    <TextView
+        android:id="@+id/tvWelcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¡Descubre nuevos desafíos en tu ciudad!"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+    <!-- Sección para introducir tiempo disponible -->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Para ingresar título y descripción de la actividad -->
-        <EditText
-            android:id="@+id/etTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Título" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
+            android:id="@+id/etAvailableTime"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Descripción"
-            android:layout_marginTop="8dp" />
+            android:layout_weight="1"
+            android:hint="Tiempo disponible (min)"
+            android:inputType="number"
+            />
 
         <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar Actividad"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/btnLoadAll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cargar Todas"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/btnExportCsv"
+            android:id="@+id/btnSearchActivities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Exportar CSV" />
-
-        <!-- Simplemente un TextView para mostrar la lista de actividades -->
-        <TextView
-            android:id="@+id/tvActivities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:text="Aquí aparecerán las actividades" />
+            android:text="Buscar"
+            android:layout_marginLeft="8dp"
+            />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- RecyclerView horizontal para mostrar 3 sugerencias -->
+    <TextView
+        android:id="@+id/tvSuggestedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actividades Sugeridas"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSuggestions"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        />
+
+    <!-- Lista vertical de actividades en curso con temporizador -->
+    <TextView
+        android:id="@+id/tvInProgressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="En progreso"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        />
+
+    <Button
+        android:id="@+id/btnExportCsv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exportar CSV" />
+
+</LinearLayout>
+

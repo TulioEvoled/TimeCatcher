@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:layout_marginRight="8dp"
+    >
+
+    <TextView
+        android:id="@+id/tvSuggestionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Título"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tvSuggestionDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvSuggestionTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10 min"
+        android:layout_marginTop="4dp"/>
+
+    <Button
+        android:id="@+id/btnDoActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Realizar"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

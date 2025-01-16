@@ -1,29 +1,61 @@
 package com.example.timecatcher.ui.main.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timecatcher.data.local.ActivityDAO
 import com.example.timecatcher.data.model.ActivityItem
+import com.example.timecatcher.data.model.InProgressItem
+import com.example.timecatcher.data.network.ActivityApi
 import com.example.timecatcher.data.repository.ActivityRepository
 import com.example.timecatcher.databinding.FragmentHomeBinding
+import com.example.timecatcher.ui.home.adapters.InProgressAdapter
+import com.example.timecatcher.ui.home.adapters.SuggestionsAdapter
 import com.example.timecatcher.utils.FileUtils
+import com.google.android.gms.location.LocationServices
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var suggestionsAdapter: SuggestionsAdapter
+    private lateinit var inProgressAdapter: InProgressAdapter
+    private val inProgressList = mutableListOf<InProgressItem>()
+
     private lateinit var repository: ActivityRepository
+
+    private lateinit var activityDAO: ActivityDAO
+
+    // Handler para refrescar cada segundo
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+            // Forzamos que se re-renderice el inProgressAdapter (onBindViewHolder)
+            inProgressAdapter.notifyDataSetChanged()
+
+            // Volvemos a programar en 1 segundo
+            handler.postDelayed(this, 1000)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1) Instanciamos el DAO
-        val dao = ActivityDAO(requireContext())
+        // 1. Instanciar el DAO para operaciones en la BD
+        activityDAO = ActivityDAO(requireContext())
         // 2) Creamos el repository (recibe el dao y el context)
-        repository = ActivityRepository(requireContext(), dao)
+        repository = ActivityRepository(requireContext(), activityDAO)
+
     }
 
     override fun onCreateView(
@@ -39,101 +71,156 @@ class HomeFragment : Fragment() {
             exportActivitiesCSV()
         }
 
-        // Botón para guardar una nueva actividad (LOCAL + REMOTO a través del Repository)
-        binding.btnSave.setOnClickListener {
-            saveNewActivity()
-        }
-
-        // Botón para cargar todas las actividades (ejemplo de integración local + remoto)
-        binding.btnLoadAll.setOnClickListener {
-            loadAllActivities()
-        }
-
         return binding.root
     }
 
-    /**
-     * Ejemplo de crear una nueva actividad usando el Repository.
-     * Se creará localmente y luego en el backend.
-     */
-    private fun saveNewActivity() {
-        val title = binding.etTitle.text.toString().trim()
-        val description = binding.etDescription.text.toString().trim()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        if (title.isNotEmpty()) {
-            val newActivity = ActivityItem(
-                // id autoincrement local, lo asignará SQLite.
-                title = title,
-                description = description,
-                latitude = null,
-                longitude = null,
-                estimatedTime = null,
-                completed = false
-            )
+        // Configurar RecyclerView horizontal de sugerencias
+        binding.rvSuggestions.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-            repository.createActivity(
-                item = newActivity,
-                onLocalSuccess = { newId ->
-                    // Esto se llama cuando la inserción local fue exitosa
-                    Toast.makeText(requireContext(), "Insertado local con ID: $newId", Toast.LENGTH_SHORT).show()
-                    // Limpiar campos
-                    binding.etTitle.text.clear()
-                    binding.etDescription.text.clear()
-                },
-                onRemoteSuccess = { remoteItem ->
-                    // Esto se llama cuando la creación en el servidor fue exitosa
-                    Toast.makeText(requireContext(), "Creado en servidor: ${remoteItem.title}", Toast.LENGTH_SHORT).show()
+        suggestionsAdapter = SuggestionsAdapter(emptyList()) { activity ->
+            // Al pulsar "Realizar"
+            startActivityInProgress(activity)
+        }
+        binding.rvSuggestions.adapter = suggestionsAdapter
+
+        // Configurar RecyclerView vertical de "en progreso"
+        binding.rvInProgress.layoutManager = LinearLayoutManager(requireContext())
+        inProgressAdapter = InProgressAdapter(inProgressList) { inProgressItem ->
+            markActivityCompleted(inProgressItem)
+        }
+        binding.rvInProgress.adapter = inProgressAdapter
+
+        // Botón "Buscar" (ingresa tiempo disponible y filtra)
+        binding.btnSearchActivities.setOnClickListener {
+            val timeStr = binding.etAvailableTime.text.toString().trim()
+            if (timeStr.isNotEmpty()) {
+                val userTime = timeStr.toInt()
+                fetchAndFilterActivities(userTime)
+            }
+        }
+
+        // Iniciar el refresco del temporizador
+        handler.post(updateRunnable)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Parar el handler
+        handler.removeCallbacks(updateRunnable)
+    }
+
+    private fun fetchAndFilterActivities(userTime: Int) {
+        getUserLocation { lat, lon ->
+            // 1) Local
+            val localList = activityDAO.getAllActivities()
+            // 2) Remoto
+            ActivityApi.getAllActivities(
+                requireContext(),
+                onSuccess = { remoteList ->
+                    val combined = localList + remoteList
+                    val filtered = filterActivities(combined, userTime, lat, lon)
+                    val top3 = filtered.take(3)
+                    // Actualiza el adapter de sugerencias
+                    suggestionsAdapter = SuggestionsAdapter(top3) { activity ->
+                        startActivityInProgress(activity)
+                    }
+                    binding.rvSuggestions.adapter = suggestionsAdapter
                 },
                 onError = { errorMsg ->
-                    // Manejo de error para remoto/local
                     Toast.makeText(requireContext(), "Error: $errorMsg", Toast.LENGTH_SHORT).show()
                 }
             )
-        } else {
-            Toast.makeText(requireContext(), "Título no puede estar vacío", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /**
-     * Cargar actividades (local + remoto) usando el Repository.
-     */
-    private fun loadAllActivities() {
-        // Llamamos a un método del repositorio que obtenga primero local, luego remoto
-        repository.getAllActivities(
-            onLocalSuccess = { localList ->
-                // Mostrar la lista local en la UI
-                showActivitiesInTextView(localList)
-            },
-            onRemoteSuccess = { remoteList ->
-                // Si deseas sobreescribir la lista con la remota o fusionar,
-                // aquí podrías decidir tu lógica. Ej.: mostrar en el mismo TextView
-                // o sincronizar la DB local con la remota
-                // showActivitiesInTextView(remoteList)
-                Toast.makeText(requireContext(), "Datos remotos cargados: ${remoteList.size} items", Toast.LENGTH_SHORT).show()
-            },
-            onError = { err ->
-                Toast.makeText(requireContext(), "Error: $err", Toast.LENGTH_SHORT).show()
+    private fun getUserLocation(callback: (latitude: Double, longitude: Double) -> Unit) {
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    callback(it.latitude, it.longitude)
+                }
             }
-        )
+        } else {
+            // Si los permisos no están concedidos, solicítalos
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                100
+            )
+        }
+    }
+
+    private fun filterActivities(
+        allActivities: List<ActivityItem>,
+        userTime: Int,
+        userLat: Double,
+        userLon: Double
+    ): List<ActivityItem> {
+        val results = mutableListOf<ActivityItem>()
+        for (act in allActivities) {
+            val actTime = act.estimatedTime ?: 0
+            if (actTime <= userTime) {
+                // comprobar distancia
+                val dist = calculateDistance(userLat, userLon, act.latitude ?: 0.0, act.longitude ?: 0.0)
+                if (dist <= 5000) { // 5 km
+                    results.add(act)
+                }
+            }
+        }
+        return results
+    }
+
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(lat1, lon1, lat2, lon2, results)
+        return results[0] // metros
     }
 
     /**
-     * Muestra una lista de ActivityItem en el TextView.
+     * Al pulsar "Realizar" en una tarjeta de sugerencia.
+     * Creamos un InProgressItem con finishTimeMillis = now + (activity.estimatedTime * 60 * 1000).
+     * Agregamos a la lista y refrescamos rvInProgress.
      */
-    private fun showActivitiesInTextView(list: List<ActivityItem>) {
-        val textBuilder = StringBuilder()
-        list.forEach { activity ->
-            textBuilder.append("ID: ${activity.id}\n")
-            textBuilder.append("Título: ${activity.title}\n")
-            textBuilder.append("Descripción: ${activity.description}\n")
-            textBuilder.append("Completado: ${activity.completed}\n\n")
-        }
-        binding.tvActivities.text = if (textBuilder.isEmpty()) {
-            "No hay actividades guardadas."
-        } else {
-            textBuilder.toString()
-        }
+    private fun startActivityInProgress(activity: ActivityItem) {
+        val estimated = activity.estimatedTime ?: 0
+        val start = System.currentTimeMillis()
+        val finish = start + (estimated * 60 * 1000L)
+
+        val inProg = InProgressItem(
+            activity = activity,
+            startTimeMillis = start,
+            finishTimeMillis = finish
+        )
+        inProgressList.add(inProg)
+        inProgressAdapter.notifyDataSetChanged()
     }
+
+    /**
+     * Al pulsar "Completado" en la lista "en progreso".
+     * Marcamos la actividad como completada en SQLite, y removemos el item en progreso.
+     */
+    private fun markActivityCompleted(inProgressItem: InProgressItem) {
+        // 1) Actualizar en DB local
+        val updated = inProgressItem.activity.copy(completed = true)
+        activityDAO.updateActivity(updated)
+
+        // 2) Quitar de la lista inProgress
+        inProgressList.remove(inProgressItem)
+        inProgressAdapter.notifyDataSetChanged()
+
+        Toast.makeText(requireContext(), "¡Actividad Completada!", Toast.LENGTH_SHORT).show()
+    }
+
 
     /**
      * Exportar CSV (igual que antes, usando el FileUtils).

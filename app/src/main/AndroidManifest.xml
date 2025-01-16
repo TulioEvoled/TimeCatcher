@@ -44,6 +44,7 @@
         </activity>
 
         <activity android:name="com.example.timecatcher.ui.main.MainActivity" />
+        <activity android:name="com.example.timecatcher.ui.login.RegisterActivity" />
 
         <activity
             android:name=".MainActivity"

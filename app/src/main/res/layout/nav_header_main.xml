@@ -16,10 +16,20 @@
         android:src="@drawable/sinfondo" />
 
     <TextView
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvNavEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="     TimeCather"
+        android:text="Correo Electronico"
         android:textColor="@android:color/white"
-        android:layout_marginTop="10dp"/>
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/tvMotivation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¡Atrévete a explorar la ciudad!"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="4dp"
+        />
 </LinearLayout>
