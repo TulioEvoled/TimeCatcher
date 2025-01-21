@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profileback"
+    android:background="@drawable/fragmentprofile"
     android:padding="16dp">
 
     <LinearLayout
@@ -54,9 +54,10 @@
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_register"
             android:text="Guardar cambios"
             android:layout_marginTop="20dp"
-            android:background="@drawable/rounded_button_register"
+            android:backgroundTint="#0277BD"
             android:textColor="#FFFFFF"
             android:padding="12dp" />
     </LinearLayout>

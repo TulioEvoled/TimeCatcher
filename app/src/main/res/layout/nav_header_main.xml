@@ -5,7 +5,7 @@
     android:layout_height="160dp"
     android:padding="16dp"
     android:orientation="vertical"
-    android:background="?attr/colorPrimaryDark"
+    android:background="#0277BD"
     android:gravity="bottom">
 
     <ImageView

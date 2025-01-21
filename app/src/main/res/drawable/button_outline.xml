@@ -6,7 +6,7 @@
     <!-- Contorno del botón -->
     <stroke
         android:width="2dp"
-        android:color="@color/purple_700" />
+        android:color="@color/white" />
 
     <!-- Esquinas redondeadas -->
     <corners android:radius="16dp" />
