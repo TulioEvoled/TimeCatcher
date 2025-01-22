@@ -95,7 +95,10 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
-                    val userLatLng = LatLng(it.latitude, it.longitude)
+                    val lat = 19.2328379
+                    val lon = -98.8413699
+                    val userLatLng = LatLng(lat.toDouble(), lon.toDouble())
+
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
 
                     // Ejemplo opcional: agregar un marker

@@ -60,16 +60,16 @@
         android:layout_marginTop="12dp"
         android:padding="4dp" />
 
+    <!-- Lista vertical de actividades en curso con temporizador -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSuggestions"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_marginTop="4dp"
         android:background="#ffffff"
         android:elevation="4dp"
         android:padding="4dp" />
 
-    <!-- Lista vertical de actividades en curso con temporizador -->
     <TextView
         android:id="@+id/tvInProgressTitle"
         android:layout_width="wrap_content"

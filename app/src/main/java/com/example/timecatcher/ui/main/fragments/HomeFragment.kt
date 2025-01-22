@@ -138,7 +138,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUserLocation(callback: (latitude: Double, longitude: Double) -> Unit) {
-
+        // Si NO quieres usar la ubicación real, COMENTA este if y usa directamente tu lat/long:
+        /*
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -146,18 +147,30 @@ class HomeFragment : Fragment() {
         ) {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                location?.let {
-                    callback(it.latitude, it.longitude)
+                if (location != null) {
+                    callback(location.latitude, location.longitude)
+                } else {
+                    // No se pudo obtener ubicación real, usar tu fija
+                    val defaultLat = 19.432608   // Ejemplo: CDMX
+                    val defaultLng = -99.133209
+                    callback(defaultLat, defaultLng)
                 }
             }
         } else {
-            // Si los permisos no están concedidos, solicítalos
+            // Solicitar permisos si de todas formas quisieras
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 100
             )
         }
+        */
+
+        // O si quieres *ignorar* permisos y ubicación real, y siempre usar la predeterminada,
+        // hazlo así (sin if):
+        val defaultLat = 19.2328379   // Ejemplo: TESCHA
+        val defaultLng = -98.8413699
+        callback(defaultLat, defaultLng)
     }
 
     private fun filterActivities(
